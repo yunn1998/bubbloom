@@ -3,466 +3,672 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bubbloom note — β版モニター募集</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Bubbloom note — バブる日を、つくろう。</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600&family=Shippori+Mincho:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --linen: #FAFAF7;
-      --ink: #333333;
-      --ink-light: #666666;
-      --ink-faint: #999999;
-      --blue-wash: #D6E8F0;
-      --blue-pale: #EBF3F8;
-      --ivory: #F5F0E8;
-      --ivory-deep: #EDE6D6;
-      --border-art: #B8CDD6;
+      --cream: #FDFBF6;
+      --ink: #4A4440;
+      --ink-soft: #7A736C;
+      --ink-faint: #A89F96;
+      --bubble-1: #DCEEF5;
+      --bubble-2: #F4E3EC;
+      --bubble-3: #EDF3DE;
+      --bubble-4: #F7EEDD;
+      --iris: #8FA8C8;
+      --petal: #D9A7BC;
+      --leaf: #A8BC8A;
+      --sun: #E3C88A;
+      --line: #E5DDD2;
     }
-    * { box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      background-color: var(--linen);
+      background: var(--cream);
       color: var(--ink);
-      font-family: 'Noto Serif JP', 'Shippori Mincho', 'Georgia', serif;
-      -webkit-font-smoothing: antialiased;
-      line-height: 2;
-      letter-spacing: 0.04em;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 300;
+      line-height: 2.1;
+      letter-spacing: 0.05em;
+      overflow-x: hidden;
     }
 
-    .ornament {
-      display: flex; align-items: center; justify-content: center;
-      gap: 16px; margin: 2rem 0;
-    }
-    .ornament-line {
-      flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-art));
-    }
-    .ornament-line.right { background: linear-gradient(90deg, var(--border-art), transparent); }
+    .serif { font-family: 'Noto Serif JP', serif; }
 
-    .frame-box {
+    .section {
+      padding: 7rem 2rem;
       position: relative;
-      border: 1px solid var(--border-art);
-      padding: 3rem 2.5rem;
     }
-    .frame-box::before, .frame-box::after {
-      content: ''; position: absolute;
-      width: 28px; height: 28px;
-      border-color: var(--blue-wash); border-style: solid;
-    }
-    .frame-box::before { top:-4px; left:-4px; border-width:2px 0 0 2px; border-radius:3px 0 0 0; }
-    .frame-box::after  { bottom:-4px; right:-4px; border-width:0 2px 2px 0; border-radius:0 0 3px 0; }
-
-    .section-label {
-      font-size: 0.68rem; letter-spacing: 0.25em;
-      color: var(--ink-faint); text-transform: uppercase; font-weight: 400;
-    }
-    .main-copy {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      line-height: 1.9; font-weight: 300; letter-spacing: 0.08em;
-    }
-    .sub-copy {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      line-height: 2.2; color: var(--ink-light); font-weight: 300;
-    }
-    h2.section-heading {
-      font-size: clamp(1.1rem, 3vw, 1.6rem);
-      font-weight: 400; line-height: 1.8; letter-spacing: 0.06em;
+    .inner {
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
-    /* Service lineup */
-    .service-pill {
-      font-size: 0.65rem; letter-spacing: 0.18em;
-      padding: 0.3rem 0.85rem;
-      border: 1px solid var(--border-art);
+    /* ---------- floating bubbles ---------- */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .bubble.outline {
+      border: 1px solid var(--line);
+      background: transparent;
+    }
+    .bubble.glass {
+      background: radial-gradient(circle at 32% 30%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 28%),
+                  var(--b, var(--bubble-1));
+      opacity: 0.55;
+    }
+    @keyframes drift {
+      0%   { transform: translateY(0) translateX(0); }
+      50%  { transform: translateY(-18px) translateX(6px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+    .drift   { animation: drift 9s ease-in-out infinite; }
+    .drift-2 { animation: drift 12s ease-in-out infinite 1.5s; }
+    .drift-3 { animation: drift 10s ease-in-out infinite 3s; }
+
+    /* ---------- hero ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 15% 25%, rgba(220,238,245,0.5) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 70%, rgba(244,227,236,0.45) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 95%, rgba(237,243,222,0.4) 0%, transparent 45%),
+        var(--cream);
+    }
+    .hero-brand {
+      font-size: 0.72rem;
+      letter-spacing: 0.45em;
+      color: var(--ink-faint);
+      margin-bottom: 3rem;
+      text-transform: lowercase;
+    }
+    .hero-copy {
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.9;
+      letter-spacing: 0.12em;
+    }
+    .hero-copy .accent { position: relative; display: inline-block; }
+    .hero-copy .accent::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0.15em;
+      height: 0.45em;
+      background: var(--bubble-1);
+      z-index: -1;
+      border-radius: 999px;
+    }
+    .hero-sub {
+      margin-top: 2.5rem;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 2.6;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
       color: var(--ink-faint);
     }
-    .service-pill.active { border-color: var(--ink); color: var(--ink); }
-    .service-pill.soon   { border-style: dashed; opacity: 0.5; }
 
-    .lineup-card {
-      border: 1px solid var(--ivory-deep);
-      padding: 2rem 1.8rem;
-      background: var(--linen);
+    /* ---------- section label ---------- */
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      color: var(--ink-faint);
+      margin-bottom: 2.5rem;
+    }
+    .label::before {
+      content: '';
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 1px solid var(--iris);
+      flex-shrink: 0;
+    }
+
+    .heading {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 400;
+      line-height: 2;
+      letter-spacing: 0.08em;
+      margin-bottom: 2rem;
+    }
+
+    .body-text {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 2.6;
+    }
+    .body-text strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* ---------- quote ---------- */
+    .soap-quote {
+      margin: 3.5rem auto;
+      padding: 3rem 2.5rem;
+      background: white;
+      border-radius: 32px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 24px rgba(143,168,200,0.12);
+    }
+    .soap-quote::before {
+      content: '';
+      position: absolute;
+      top: -14px; right: 36px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 30%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 30%), var(--bubble-1);
+    }
+    .soap-quote::after {
+      content: '';
+      position: absolute;
+      top: -30px; right: 70px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 30%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 30%), var(--bubble-2);
+    }
+    .soap-quote p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 400;
+      line-height: 2.2;
+      letter-spacing: 0.08em;
+    }
+
+    /* ---------- 感覚リスト ---------- */
+    .feel-list { list-style: none; margin-top: 1rem; }
+    .feel-list li {
+      background: white;
+      border-radius: 999px;
+      padding: 1.1rem 2rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 1px 12px rgba(74,68,64,0.05);
+    }
+    .feel-list li .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .feel-list li:nth-child(1) .dot { background: var(--iris); }
+    .feel-list li:nth-child(2) .dot { background: var(--petal); }
+    .feel-list li:nth-child(3) .dot { background: var(--leaf); }
+    .feel-list li:nth-child(4) .dot { background: var(--sun); }
+
+    /* ---------- process ---------- */
+    .process-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 3rem;
+    }
+    .process-step {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      position: relative;
+      padding-bottom: 3.5rem;
+    }
+    .process-step:last-child { padding-bottom: 0; }
+    .process-step::before {
+      content: '';
+      position: absolute;
+      left: 34px;
+      top: 76px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(180deg, var(--line), transparent);
+    }
+    .process-step:last-child::before { display: none; }
+    .process-icon {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .process-icon.i1 { background: var(--bubble-1); }
+    .process-icon.i2 { background: var(--bubble-2); }
+    .process-icon.i3 { background: var(--bubble-3); }
+    .process-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.9rem;
+      margin-bottom: 0.6rem;
+      padding-top: 0.9rem;
+    }
+    .process-title .month {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--ink-faint);
+      font-weight: 300;
+    }
+    .process-desc {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 2.4;
+    }
+    .process-note {
+      margin-top: 2.5rem;
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      text-align: center;
+      letter-spacing: 0.08em;
+    }
+
+    /* ---------- 一緒にバブりたい ---------- */
+    .with-list { list-style: none; margin-top: 1rem; }
+    .with-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      border-bottom: 1px dashed var(--line);
+    }
+    .with-list li svg { flex-shrink: 0; margin-top: 0.55em; }
+
+    /* ---------- plans ---------- */
+    .plans {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (max-width: 620px) { .plans { grid-template-columns: 1fr; } }
+    .plan {
+      background: white;
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 2px 20px rgba(74,68,64,0.06);
       position: relative;
     }
-    .lineup-card.active-card { border-color: var(--border-art); background: var(--blue-pale); }
-    .lineup-card.soon-card   { opacity: 0.55; }
-    .lineup-card-label { font-size:0.58rem; letter-spacing:0.3em; color:var(--ink-faint); margin-bottom:0.6rem; display:block; }
-    .lineup-card-name  { font-size:1rem; font-weight:400; letter-spacing:0.15em; margin-bottom:0.5rem; color:var(--ink); }
-    .lineup-card-desc  { font-size:0.76rem; color:var(--ink-faint); line-height:1.9; font-weight:300; }
-    .soon-badge {
-      position:absolute; top:1rem; right:1rem;
-      font-size:0.55rem; letter-spacing:0.2em;
-      border:1px dashed var(--border-art); color:var(--ink-faint); padding:0.2rem 0.5rem;
+    .plan.soon { opacity: 0.55; }
+    .plan.main { box-shadow: 0 4px 28px rgba(143,168,200,0.22); }
+    .plan-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      padding: 0.25rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.4rem;
     }
-    .active-badge {
-      position:absolute; top:1rem; right:1rem;
-      font-size:0.55rem; letter-spacing:0.2em;
-      border:1px solid var(--ink); color:var(--ink); padding:0.2rem 0.5rem;
+    .plan.soon .plan-tag { background: var(--bubble-4); color: #A08850; }
+    .plan.main .plan-tag { background: var(--bubble-1); color: #5578A0; }
+    .plan-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+    .plan-price {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+    .plan-price small { font-size: 0.85rem; color: var(--ink-soft); font-family: 'Zen Maru Gothic', sans-serif; }
+    .plan-price-sub {
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      margin-top: 0.4rem;
+      margin-bottom: 1.4rem;
+    }
+    .plan-items { list-style: none; padding-top: 1.4rem; border-top: 1px dashed var(--line); }
+    .plan-items li {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      line-height: 2.2;
+      padding-left: 1.3rem;
+      position: relative;
+    }
+    .plan-items li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.75em;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      border: 1px solid var(--iris);
+    }
+    .plan-note {
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      margin-top: 1.4rem;
+      line-height: 1.9;
     }
 
-    /* Pain */
-    .pain-item {
-      padding:1.4rem 0; border-bottom:1px solid var(--ivory-deep);
-      font-size:0.95rem; line-height:2.1; color:var(--ink-light);
-      display:flex; align-items:flex-start; gap:1rem;
-    }
-    .pain-item:first-of-type { border-top:1px solid var(--ivory-deep); }
-    .pain-dash { color:var(--border-art); flex-shrink:0; margin-top:0.1em; font-size:0.8rem; letter-spacing:0.15em; }
-
-    /* Steps */
-    .step-card {
-      background:var(--ivory); border:1px solid var(--ivory-deep);
-      padding:2.5rem 2rem; position:relative;
-    }
-    .step-card::before {
-      content:''; position:absolute; top:0; left:0;
-      width:2px; height:100%;
-      background:linear-gradient(180deg, var(--blue-wash), transparent);
-    }
-    .step-month { font-size:0.65rem; letter-spacing:0.3em; color:var(--ink-faint); margin-bottom:0.8rem; display:block; }
-    .step-title { font-size:1.05rem; font-weight:500; letter-spacing:0.05em; margin-bottom:0.6rem; line-height:1.6; }
-    .step-desc  { font-size:0.82rem; color:var(--ink-light); line-height:2; font-weight:300; }
-
-    /* Offer */
-    .price-display { font-size:clamp(2rem,6vw,3.5rem); font-weight:300; letter-spacing:0.05em; line-height:1; color:var(--ink); }
-    .strikethrough-price { text-decoration:line-through; color:var(--ink-faint); font-size:0.85rem; }
+    /* ---------- CTA ---------- */
+    .cta-zone { text-align: center; margin-top: 4rem; }
     .cta-button {
-      display:inline-block; background:var(--ink); color:var(--linen);
-      font-family:'Noto Serif JP',serif; font-size:0.85rem; font-weight:400;
-      letter-spacing:0.15em; padding:1.2rem 3rem;
-      border:none; cursor:pointer;
-      transition:background 0.4s ease, letter-spacing 0.3s ease;
-      text-decoration:none; text-align:center;
+      display: inline-block;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      padding: 1.3rem 3.5rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 20px rgba(74,68,64,0.25);
     }
-    .cta-button:hover { background:#1a1a1a; letter-spacing:0.2em; }
-    .condition-item { display:flex; align-items:flex-start; gap:0.8rem; font-size:0.88rem; line-height:2; color:var(--ink-light); padding:0.6rem 0; }
-    .condition-mark { color:var(--border-art); flex-shrink:0; font-size:0.75rem; margin-top:0.25em; }
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(74,68,64,0.3);
+    }
+    .cta-note {
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+      margin-top: 1.4rem;
+      letter-spacing: 0.15em;
+    }
 
-    .fv-bg {
-      background:
-        radial-gradient(ellipse at 80% 20%, rgba(214,232,240,0.25) 0%, transparent 60%),
-        radial-gradient(ellipse at 20% 80%, rgba(237,230,214,0.2) 0%, transparent 55%),
-        var(--linen);
+    /* ---------- footer ---------- */
+    .footer {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
     }
-    .steps-connector { width:1px; height:2rem; background:linear-gradient(180deg,var(--blue-wash),transparent); margin:0 auto; }
-    footer { font-size:0.72rem; color:var(--ink-faint); letter-spacing:0.12em; }
+    .footer-message {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      line-height: 2.8;
+      margin-bottom: 3.5rem;
+    }
+    .footer-brand {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      color: var(--ink-faint);
+    }
+    .footer-small {
+      font-size: 0.6rem;
+      color: var(--ink-faint);
+      opacity: 0.7;
+      margin-top: 0.6rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ---------- bloom svg ---------- */
+    .bloom-divider {
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+    }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="py-7 px-8 md:px-16" style="border-bottom:1px solid var(--ivory-deep);">
-  <div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center gap-4 md:gap-0 justify-between">
-    <div>
-      <span style="font-family:'Noto Serif JP',serif; font-size:1.15rem; font-weight:400; letter-spacing:0.22em; color:var(--ink);">Bubbloom</span>
-      <span style="display:block; font-size:0.58rem; letter-spacing:0.18em; color:var(--ink-faint); margin-top:2px;">泡立てて汚れを落とし、本来の彩で花を咲かせる</span>
-    </div>
-    <nav style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
-      <span class="service-pill active">note</span>
-      <span class="service-pill soon">schedule</span>
-      <span class="service-pill soon">diary</span>
-    </nav>
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="bubble glass drift" style="--b:var(--bubble-1); width:120px; height:120px; top:12%; left:8%;"></div>
+  <div class="bubble glass drift-2" style="--b:var(--bubble-2); width:70px; height:70px; top:22%; right:12%;"></div>
+  <div class="bubble outline drift-3" style="width:44px; height:44px; top:60%; left:14%;"></div>
+  <div class="bubble glass drift-3" style="--b:var(--bubble-3); width:90px; height:90px; bottom:18%; right:8%;"></div>
+  <div class="bubble outline drift" style="width:26px; height:26px; top:38%; right:24%;"></div>
+  <div class="bubble outline drift-2" style="width:16px; height:16px; bottom:30%; left:28%;"></div>
+
+  <div class="inner">
+    <p class="hero-brand">bubbloom note</p>
+    <h1 class="hero-copy">
+      バブる日を、<br/>
+      <span class="accent">つくろう。</span>
+    </h1>
+    <p class="hero-sub">
+      泡立てて、洗い流して、自分本来の彩を見つける日。<br/>
+      その彩で、花を咲かせる。
+    </p>
   </div>
-</header>
-
-
-<!-- SERVICE LINEUP -->
-<section style="background:var(--ivory); border-bottom:1px solid var(--ivory-deep);">
-  <div class="max-w-4xl mx-auto px-8 md:px-16 py-12 md:py-16">
-    <p class="section-label" style="margin-bottom:2rem;">Bubbloom services</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
-
-      <div class="lineup-card active-card">
-        <span class="active-badge">Now open</span>
-        <span class="lineup-card-label">01 — note</span>
-        <div class="lineup-card-name">Bubbloom note</div>
-        <p class="lineup-card-desc">専用ノート×伴走対話。<br/>3ヶ月で本来の彩を取り戻す。</p>
-      </div>
-
-      <div class="lineup-card soon-card">
-        <span class="soon-badge">Coming soon</span>
-        <span class="lineup-card-label">02 — schedule</span>
-        <div class="lineup-card-name">Bubbloom schedule</div>
-        <p class="lineup-card-desc">自分の基準から逆算する、<br/>時間の使い方を設計する。</p>
-      </div>
-
-      <div class="lineup-card soon-card">
-        <span class="soon-badge">Coming soon</span>
-        <span class="lineup-card-label">03 — diary</span>
-        <div class="lineup-card-name">Bubbloom diary</div>
-        <p class="lineup-card-desc">毎日の小さな揺れを記録し、<br/>変化の芽を育てていく。</p>
-      </div>
-
-    </div>
-  </div>
+  <span class="scroll-hint">scroll</span>
 </section>
 
+<!-- ==================== バブる日って？ ==================== -->
+<section class="section">
+  <div class="bubble outline drift-2" style="width:60px; height:60px; top:8%; right:6%;"></div>
+  <div class="bubble glass drift" style="--b:var(--bubble-2); width:36px; height:36px; bottom:12%; left:5%;"></div>
 
-<!-- FIRST VIEW -->
-<section class="fv-bg min-h-screen flex flex-col justify-center px-8 md:px-16 py-24 md:py-32">
-  <div class="max-w-3xl mx-auto">
-
-    <div class="ornament" style="margin-bottom:3rem; margin-top:0;">
-      <div class="ornament-line" style="max-width:80px;"></div>
-      <span style="font-size:0.6rem; letter-spacing:0.3em; color:var(--ink-faint);">Bubbloom note — 3-month program</span>
-      <div class="ornament-line right" style="max-width:80px;"></div>
-    </div>
-
-    <div style="margin-bottom:3rem;">
-      <h1 style="font-family:'Noto Serif JP',serif; font-size:clamp(2.2rem,6vw,3.8rem); font-weight:300; letter-spacing:0.22em; color:var(--ink); line-height:1.2; margin-bottom:0.5rem;">note</h1>
-      <p style="font-size:0.72rem; color:var(--ink-faint); letter-spacing:0.2em; font-weight:300;">by Bubbloom</p>
-    </div>
-
-    <h2 class="main-copy mb-10 md:mb-14">
-      誰かの「正解」を探す毎日に、<br/>
-      <span style="display:inline-block; margin-left:2em;">自分を取り戻す余白を。</span>
+  <div class="inner">
+    <p class="label">バブる日って？</p>
+    <h2 class="heading">
+      周りの言葉、「当たり前」、<br/>
+      気づかないうちに染み込んできた期待——
     </h2>
-
-    <div style="width:40px; height:1px; background:var(--border-art); margin-bottom:2.5rem;"></div>
-
-    <p class="sub-copy max-w-xl" style="line-height:2.4;">
-      まわりの声や「当たり前」が積もって、<br/>
-      本来の彩が見えなくなっていませんか。<br/>
-      Bubbloom noteは、ノートという静かな場所で泡を立て、<br/>
-      その層を丁寧に洗い流すところから始まります。<br/>
-      <strong style="font-weight:500; color:var(--ink);">3ヶ月かけて、あなた本来の彩で咲く。</strong>
+    <p class="body-text">
+      そういうものが、少しずつ自分に付着していく。
     </p>
 
-    <div class="mt-16 md:mt-20">
-      <a href="#offer" class="cta-button">β版に申し込む</a>
-    </div>
-
-    <div class="mt-20 md:mt-24" style="opacity:0.35;">
-      <svg width="180" height="28" viewBox="0 0 180 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="14" x2="60" y2="14" stroke="#B8CDD6" stroke-width="0.8"/>
-        <path d="M60 14 Q70 4 80 14 Q90 24 100 14 Q110 4 120 14" stroke="#B8CDD6" stroke-width="0.8" fill="none"/>
-        <line x1="120" y1="14" x2="180" y2="14" stroke="#B8CDD6" stroke-width="0.8"/>
-        <circle cx="90" cy="14" r="2.5" stroke="#B8CDD6" stroke-width="0.8" fill="none"/>
-        <circle cx="90" cy="14" r="1" fill="#B8CDD6"/>
-        <circle cx="70" cy="14" r="1.2" fill="#B8CDD6"/>
-        <circle cx="110" cy="14" r="1.2" fill="#B8CDD6"/>
-      </svg>
-    </div>
-  </div>
-</section>
-
-
-<!-- PAIN SECTION -->
-<section class="px-8 md:px-16 py-24 md:py-36">
-  <div class="max-w-3xl mx-auto">
-
-    <div class="mb-12">
-      <span class="section-label" style="display:block; margin-bottom:1.2rem;">共感</span>
-      <h2 class="section-heading">
-        心の奥に、こんな声が<br/>
-        くすぶっていませんか？
-      </h2>
-    </div>
-
-    <div style="margin-top:3rem;">
-      <div class="pain-item">
-        <span class="pain-dash">—</span>
-        <span>周りの内定やインターンの報告を聞くたびに、自分だけ取り残されていく感覚がある</span>
-      </div>
-      <div class="pain-item">
-        <span class="pain-dash">—</span>
-        <span>「自分はどんな人間か」を書き続けるほど、本当の輪郭がぼやけていく</span>
-      </div>
-      <div class="pain-item">
-        <span class="pain-dash">—</span>
-        <span>親や友人の期待に応えようとするうちに、自分の本音がどこにあるか分からなくなった</span>
-      </div>
-      <div class="pain-item">
-        <span class="pain-dash">—</span>
-        <span>「これが普通」と言い聞かせながら、毎日どこかで小さく消耗している</span>
-      </div>
-    </div>
-
-    <div class="ornament" style="margin-top:4rem;">
-      <div class="ornament-line"></div>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2 Q14 7 19 7 Q14 9 16 14 Q12 10 8 14 Q10 9 5 7 Q10 7 12 2Z" stroke="#B8CDD6" stroke-width="0.8" fill="none"/>
-        <circle cx="12" cy="12" r="1.5" fill="#B8CDD6"/>
-      </svg>
-      <div class="ornament-line right"></div>
-    </div>
-
-    <p class="sub-copy" style="font-size:0.85rem; line-height:2.6; margin-top:0.5rem; text-align:center; color:var(--ink-faint);">
-      あなたの彩は、消えたのではありません。<br/>
-      ただ、積もったものに覆われているだけです。
-    </p>
-
-  </div>
-</section>
-
-
-<!-- SOLUTION SECTION -->
-<section class="px-8 md:px-16 py-24 md:py-36" style="background: var(--ivory);">
-  <div class="max-w-3xl mx-auto">
-
-    <span class="section-label" style="display:block; margin-bottom:1.2rem;">Bubbloom noteとは</span>
-    <h2 class="section-heading mb-12">
-      正解を探すためではなく、<br/>
-      覆いを洗い流すための時間。
-    </h2>
-
-    <div class="frame-box" style="background:var(--linen);">
-      <p class="sub-copy" style="font-size:0.92rem; line-height:2.4; color:var(--ink);">
-        Bubbloom noteは、専用ノートへの記述と<br/>
-        2週間に1回の対話を組み合わせた、3ヶ月の伴走プログラムです。
-      </p>
-      <p class="sub-copy mt-6" style="font-size:0.88rem; line-height:2.6;">
-        泡は、まわりの声や「当たり前」を洗い流すために使うもの。<br/>
-        ここで初めて泡を立てて、積もった層を一つずつほぐしていく。<br/>
-        洗い流した先に現れるのは、もともとあなたが持っていた彩です。<br/><br/>
-        「何がやりたいか」よりも前にある問い——<br/>
-        <strong style="font-weight:500; color:var(--ink);">「どんな環境で、どんな人たちと、どう生きたいか」</strong><br/>
-        という土台から、あなた本来の彩を取り戻します。
+    <div class="soap-quote">
+      <p>
+        「こうあるべき」と「こうしたい」の<br/>
+        区別が、だんだんわからなくなる。
       </p>
     </div>
 
-  </div>
-</section>
-
-
-<!-- ROADMAP SECTION -->
-<section class="px-8 md:px-16 py-24 md:py-36">
-  <div class="max-w-3xl mx-auto">
-
-    <span class="section-label" style="display:block; margin-bottom:1.2rem;">3ヶ月のプロセス</span>
-    <h2 class="section-heading mb-16">
-      泡立て、洗い流し、咲く。<br/>
-      Bubbloom noteの3ヶ月
-    </h2>
-
-    <div class="step-card">
-      <span class="step-month">1st month — 泡立てる</span>
-      <div class="step-title">積もったものを、ほぐす</div>
-      <div class="step-desc">
-        まわりの声、社会の「べき」、誰かの期待——<br/>
-        気づかないうちに重なったそれらを、ノートの上に吐き出します。<br/>
-        泡を立てるのはここが初めてでいい。何が積もっていたかを確かめることから始めます。
-      </div>
-    </div>
-
-    <div class="steps-connector"></div>
-
-    <div class="step-card">
-      <span class="step-month">2nd month — 洗い流す</span>
-      <div class="step-title">覆いを、落とす</div>
-      <div class="step-desc">
-        「べき」を一つずつ手放し、その下に眠っていた輪郭を言葉にしていきます。<br/>
-        他人の声が薄れるにつれて、あなた固有の彩が少しずつ浮かび上がります。<br/>
-        「譲れない基準」が見えてきたとき、霧が晴れる感覚があります。
-      </div>
-    </div>
-
-    <div class="steps-connector"></div>
-
-    <div class="step-card">
-      <span class="step-month">3rd month — 咲く</span>
-      <div class="step-title">本来の彩で、一歩を記す</div>
-      <div class="step-desc">
-        洗い直した土台の上に、あなた自身の言葉で行動を描きます。<br/>
-        華やかな決意よりも、静かで確かな「一歩目」を。<br/>
-        その記録が、Bubbloom noteの最後のページになります。
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- OFFER SECTION -->
-<section id="offer" class="px-8 md:px-16 py-24 md:py-36" style="background: var(--blue-pale);">
-  <div class="max-w-3xl mx-auto">
-
-    <span class="section-label" style="display:block; margin-bottom:1.2rem;">募集要項</span>
-    <h2 class="section-heading mb-12">
-      Bubbloom note β版——<br/>
-      一緒に育ててくれる方を探しています。
-    </h2>
-
-    <div class="frame-box" style="background:var(--linen);">
-
-      <p class="sub-copy mb-8" style="font-size:0.9rem; line-height:2.6; color:var(--ink);">
-        Bubbloom noteは現在、正式リリースに向けたβ版として動いています。<br/>
-        本来<span class="strikethrough-price">12万円</span>（学生料金 <span class="strikethrough-price">6万円</span>）のプログラムを、<br/>
-        今だけ特別価格でご提供します。<br/>
-        あなたの声が、このノートをより良いものに育てます。
-      </p>
-
-      <div style="border-top:1px solid var(--ivory-deep); padding-top:2rem; margin-top:1rem;">
-        <span class="section-label" style="display:block; margin-bottom:0.8rem;">参加費</span>
-        <div class="price-display">¥5,000</div>
-        <p style="font-size:0.75rem; color:var(--ink-faint); margin-top:0.5rem; letter-spacing:0.1em;">3ヶ月間 / 税込</p>
-      </div>
-
-      <div style="border-top:1px solid var(--ivory-deep); padding-top:2rem; margin-top:2rem;">
-        <span class="section-label" style="display:block; margin-bottom:1rem;">参加にあたって</span>
-        <div class="condition-item">
-          <span class="condition-mark">◦</span>
-          <span>3ヶ月間、自分の彩を取り戻すことを諦めないこと</span>
-        </div>
-        <div class="condition-item">
-          <span class="condition-mark">◦</span>
-          <span>終了後、プログラム改善のためのアンケートまたはインタビュー（匿名可）にご協力いただけること</span>
-        </div>
-      </div>
-
-      <div style="margin-top:3rem; text-align:center;">
-        <a href="#" class="cta-button" style="display:block; max-width:480px; margin:0 auto;">
-          このノートで、泡を立ててみる<br/>
-          <span style="font-size:0.72rem; letter-spacing:0.2em; opacity:0.7;">— Bubbloom note β版に申し込む —</span>
-        </a>
-        <p style="font-size:0.72rem; color:var(--ink-faint); margin-top:1.2rem; letter-spacing:0.1em;">
-          ※ 本募集は友人からの紹介限定となっております
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- CLOSING / FOOTER -->
-<section class="px-8 md:px-16 py-24 md:py-28">
-  <div class="max-w-3xl mx-auto text-center">
-
-    <div class="ornament">
-      <div class="ornament-line"></div>
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 2 Q19 9 26 9 Q19 12 22 19 Q16 13 10 19 Q13 12 6 9 Q13 9 16 2Z" stroke="#B8CDD6" stroke-width="0.9" fill="none"/>
-        <circle cx="16" cy="16" r="2" stroke="#B8CDD6" stroke-width="0.9" fill="none"/>
-      </svg>
-      <div class="ornament-line right"></div>
-    </div>
-
-    <p class="sub-copy" style="font-size:0.85rem; line-height:2.8; margin-top:1rem; color:var(--ink-light);">
-      あなたの彩は、最初からそこにあります。<br/>
-      Bubbloomは、それが咲けるよう、静かに洗い流す場所です。
+    <p class="body-text">
+      バブるとは、その付着したものを泡立てて、洗い流すこと。<br/>
+      剥がれた先に、<strong>自分本来の彩</strong>がある。<br/>
+      その彩で花を咲かせる日が、<strong>バブる日</strong>。
     </p>
+  </div>
+</section>
 
-    <div style="margin-top:5rem; padding-top:2rem; border-top:1px solid var(--ivory-deep);">
-      <div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-bottom:2rem;">
-        <div style="text-align:left;">
-          <span style="font-size:0.6rem; letter-spacing:0.22em; color:var(--ink); display:block; margin-bottom:0.4rem;">Bubbloom</span>
-          <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-            <span style="font-size:0.6rem; letter-spacing:0.15em; color:var(--ink-light); border-bottom:1px solid var(--border-art); padding-bottom:1px;">note</span>
-            <span style="font-size:0.6rem; letter-spacing:0.15em; color:var(--ink-faint);">schedule <span style="font-size:0.5rem; opacity:0.7;">soon</span></span>
-            <span style="font-size:0.6rem; letter-spacing:0.15em; color:var(--ink-faint);">diary <span style="font-size:0.5rem; opacity:0.7;">soon</span></span>
-          </div>
+<!-- ==================== こんな感覚、ある？ ==================== -->
+<section class="section" style="background: linear-gradient(180deg, transparent, rgba(220,238,245,0.28), transparent);">
+  <div class="inner">
+    <p class="label">こんな感覚、ある？</p>
+    <ul class="feel-list">
+      <li><span class="dot"></span>なんとなく、まわりに合わせて生きている気がする</li>
+      <li><span class="dot"></span>やりたいことを聞かれると、答えに詰まる</li>
+      <li><span class="dot"></span>「自分らしい」という感覚が薄れてきた</li>
+      <li><span class="dot"></span>毎日をこなすことに、少し疲れた</li>
+    </ul>
+    <p class="body-text" style="margin-top: 2.5rem; text-align: center;">
+      それは自分が消えているんじゃなくて、<br/>
+      <strong>付着したものが厚くなっているだけ</strong>かもしれない。
+    </p>
+  </div>
+</section>
+
+<!-- ==================== Bubbloom noteとは ==================== -->
+<section class="section">
+  <div class="bubble glass drift-3" style="--b:var(--bubble-3); width:80px; height:80px; top:14%; left:4%;"></div>
+
+  <div class="inner" style="text-align:center;">
+    <p class="label" style="justify-content:center;">bubbloom note とは</p>
+    <h2 class="heading">自分を探索する場所。</h2>
+    <p class="body-text">
+      コーチングでも、カウンセリングでもない。<br/>
+      問いを重ねながら、自分の彩を見つけにいく3ヶ月。
+    </p>
+    <p class="body-text" style="margin-top:1.5rem;">
+      ひとりでバブるか、みんなでバブるか。<br/>
+      どちらのかたちでも、バブる日は作れる。
+    </p>
+  </div>
+</section>
+
+<!-- ==================== 3ヶ月のプロセス ==================== -->
+<section class="section" style="background: linear-gradient(180deg, transparent, rgba(244,227,236,0.22), transparent);">
+  <div class="inner">
+    <p class="label">ひとりでバブる — 3ヶ月のプロセス</p>
+
+    <div class="process-wrap">
+
+      <div class="process-step">
+        <div class="process-icon i1">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+            <circle cx="13" cy="15" r="7" stroke="#5578A0" stroke-width="1.2"/>
+            <circle cx="23" cy="11" r="4" stroke="#5578A0" stroke-width="1.2"/>
+            <circle cx="22" cy="22" r="2.5" stroke="#5578A0" stroke-width="1.2"/>
+            <circle cx="10.5" cy="12.5" r="1.2" fill="#5578A0" opacity="0.5"/>
+          </svg>
+        </div>
+        <div>
+          <p class="process-title">泡立てる <span class="month">1st month</span></p>
+          <p class="process-desc">
+            バブりはじめる月。<br/>
+            積もってたもの、ぜんぶ泡立てよう。<br/>
+            何が出てくるか、まだわからなくていい。
+          </p>
         </div>
       </div>
-      <footer>
-        <p style="letter-spacing:0.22em; font-size:0.65rem;">Bubbloom © 2025</p>
-        <p style="margin-top:0.5rem; font-size:0.62rem; opacity:0.7;">本サービスは友人紹介制のβ版プログラムです</p>
-      </footer>
+
+      <div class="process-step">
+        <div class="process-icon i2">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+            <path d="M8 10 Q17 16 10 26" stroke="#B06A8C" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M17 8 Q24 16 18 27" stroke="#B06A8C" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M25 11 Q29 18 25 24" stroke="#B06A8C" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <p class="process-title">洗い流す <span class="month">2nd month</span></p>
+          <p class="process-desc">
+            泡が立ったら、流してみる。<br/>
+            自分のものじゃなかったものが、<br/>
+            するっと落ちていく感覚がある。
+          </p>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-icon i3">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+            <path d="M17 6 Q20 12 26 12 Q20 15 22 21 Q17 16 12 21 Q14 15 8 12 Q14 12 17 6Z" stroke="#7A9455" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+            <circle cx="17" cy="14" r="2" fill="#7A9455" opacity="0.5"/>
+            <path d="M17 21 L17 28" stroke="#7A9455" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <p class="process-title">咲く <span class="month">3rd month</span></p>
+          <p class="process-desc">
+            残ったのが、あなたの彩。<br/>
+            その彩で、バブる日を生きる。
+          </p>
+        </div>
+      </div>
+
     </div>
 
+    <p class="process-note">2週間に1回、個別でバブる時間（計6回）。</p>
   </div>
+</section>
+
+<!-- ==================== こんな人と ==================== -->
+<section class="section">
+  <div class="bubble outline drift" style="width:48px; height:48px; top:20%; right:8%;"></div>
+
+  <div class="inner">
+    <p class="label">こんな人と一緒にバブりたい</p>
+    <ul class="with-list">
+      <li>
+        <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="#8FA8C8" stroke-width="1" fill="none"/></svg>
+        3ヶ月、自分と向き合う時間をつくれる人
+      </li>
+      <li>
+        <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="#D9A7BC" stroke-width="1" fill="none"/></svg>
+        答えを急がず、探索を楽しめる人
+      </li>
+      <li>
+        <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" stroke="#A8BC8A" stroke-width="1" fill="none"/></svg>
+        終了後、感想を聞かせてくれる人
+      </li>
+    </ul>
+    <p style="font-size:0.75rem; color:var(--ink-faint); margin-top:2rem;">
+      現在はβ版のため、友人紹介のみでの募集です。
+    </p>
+  </div>
+</section>
+
+<!-- ==================== PLANS ==================== -->
+<section class="section" id="offer" style="background: linear-gradient(180deg, transparent, rgba(220,238,245,0.35) 30%, rgba(220,238,245,0.35) 70%, transparent);">
+  <div class="inner">
+    <p class="label">プランを選ぶ</p>
+
+    <div class="plans">
+
+      <div class="plan soon">
+        <span class="plan-tag">coming soon</span>
+        <p class="plan-title">みんなでバブる</p>
+        <ul class="plan-items" style="border-top:none; padding-top:0;">
+          <li>コミュニティ参加</li>
+          <li>グループでのバブる日</li>
+        </ul>
+      </div>
+
+      <div class="plan main">
+        <span class="plan-tag">β版 受付中</span>
+        <p class="plan-title">ひとりでバブる</p>
+        <p class="plan-price">¥5,000<small>（買い切り）</small></p>
+        <p class="plan-price-sub">3ヶ月間 · 税込</p>
+        <ul class="plan-items">
+          <li>個別セッション 計6回</li>
+          <li>3ヶ月の探索プロセス</li>
+        </ul>
+        <p class="plan-note">通常価格 ¥30,000（学生 ¥15,000）／β版特別価格です</p>
+      </div>
+
+    </div>
+
+    <div class="cta-zone">
+      <a href="#" class="cta-button">バブる日を始めてみる</a>
+      <p class="cta-note">β版 · 友人紹介限定</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<section class="footer">
+  <div class="bloom-divider">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 10 Q35 20 45 20 Q36 25 39 35 Q30 27 21 35 Q24 25 15 20 Q25 20 30 10Z" stroke="#D9A7BC" stroke-width="1" fill="none" stroke-linejoin="round"/>
+      <circle cx="30" cy="24" r="3" stroke="#D9A7BC" stroke-width="1" fill="none"/>
+      <circle cx="44" cy="12" r="4" stroke="#B8CDD6" stroke-width="0.8" fill="none" opacity="0.7"/>
+      <circle cx="50" cy="22" r="2" stroke="#B8CDD6" stroke-width="0.8" fill="none" opacity="0.7"/>
+    </svg>
+  </div>
+  <p class="footer-message">
+    あなたがすでに持っている彩を、<br/>
+    ただ静かに、取り戻す時間です。
+  </p>
+  <p class="footer-brand">bubbloom note © 2025</p>
+  <p class="footer-small">本サービスは友人紹介制のβ版プログラムです</p>
 </section>
 
 </body>
